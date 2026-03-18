@@ -34,4 +34,16 @@ class LeaderboardControllerTests {
         verify(mockedService).getLeaderboard(2)
     }
 
+    @Test
+    fun test_getLeaderboard_withoutParam_usesDefaultNull() {
+        val expectedList = listOf(GameResult(1, "Test", 10, 10.0))
+        // Den Aufruf mit null mocken, da das der Standardwert ist
+        whenever(mockedService.getLeaderboard(null)).thenReturn(expectedList)
+
+        // Klammer bleibt leer
+        val result = controller.getLeaderboard()
+
+        assertEquals(expectedList, result)
+        verify(mockedService).getLeaderboard(null)
+    }
 }
