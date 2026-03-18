@@ -3,6 +3,8 @@ package at.aau.serg.services
 import at.aau.serg.models.GameResult
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
@@ -72,4 +74,46 @@ class GameResultServiceTests {
         assertEquals(2, res[1].id)
     }
 
+    @Test
+    fun test_getLeaderboard_correctScoreSorting() {
+        service.addGameResult(GameResult(0, "second", 15, 10.0))
+        service.addGameResult(GameResult(0, "first", 20, 20.0))
+        service.addGameResult(GameResult(0, "third", 10, 15.0))
+
+        val res = service.getLeaderboard(null)
+
+        assertEquals(3, res.size)
+        assertEquals("first", res[0].playerName)
+        assertEquals("second", res[1].playerName)
+        assertEquals("third", res[2].playerName)
+    }
+
+    @Test
+    fun test_getLeaderboard_sameScore_CorrectTimeSorting() {
+        // Gleiche Punkte, aber unterschiedliche Zeiten (weniger ist besser)
+        service.addGameResult(GameResult(0, "second", 20, 10.0))
+        service.addGameResult(GameResult(0, "first", 20, 20.0))
+        service.addGameResult(GameResult(0, "third", 20, 15.0))
+
+        val res = service.getLeaderboard(null)
+
+        assertEquals(3, res.size)
+        assertEquals("second", res[0].playerName)
+        assertEquals("third", res[1].playerName)
+        assertEquals("first", res[2].playerName)
+    }
+
+    @Test
+    fun test_getLeaderboard_rankTooSmall_throwsException() {
+        assertThrows<ResponseStatusException> {
+            service.getLeaderboard(0) // Service ist leer -> wirft Fehler
+        }
+    }
+
+    @Test
+    fun test_getLeaderboard_rankTooBig_throwsException() {
+        assertThrows<ResponseStatusException> {
+            service.getLeaderboard(1) // Service ist leer, Platz 1 gibt es nicht -> wirft Fehler
+        }
+    }
 }
