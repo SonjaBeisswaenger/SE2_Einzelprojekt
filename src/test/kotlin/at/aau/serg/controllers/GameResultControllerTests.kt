@@ -57,4 +57,15 @@ class GameResultControllerTests {
         // Prüft, ob der Löschbefehl beim Service ankommt
         verify(mockedService).deleteGameResult(1)
     }
+
+    @Test
+    fun test_getAllGameResults_callsService() {
+        val expectedList = listOf(GameResult(1, "Player", 10, 10.0))
+        whenever(mockedService.getGameResults()).thenReturn(expectedList)
+
+        val actual = controller.getAllGameResults()
+
+        assertEquals(expectedList, actual)
+        verify(mockedService).getGameResults()
+    }
 }
