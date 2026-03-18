@@ -33,4 +33,5 @@ class LeaderboardControllerTests {
         assertEquals(expectedList, result)
         verify(mockedService).getLeaderboard(2)
     }
+
 }

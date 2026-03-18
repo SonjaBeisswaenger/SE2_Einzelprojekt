@@ -17,4 +17,5 @@ class LeaderboardController(
     fun getLeaderboard(@RequestParam(required = false) rank: Int? = null): List<GameResult> {
         return gameResultService.getLeaderboard(rank)
     }
+
 }

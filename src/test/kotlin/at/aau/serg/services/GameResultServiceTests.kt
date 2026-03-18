@@ -116,4 +116,5 @@ class GameResultServiceTests {
             service.getLeaderboard(1) // Service ist leer, Platz 1 gibt es nicht -> wirft Fehler
         }
     }
+
 }

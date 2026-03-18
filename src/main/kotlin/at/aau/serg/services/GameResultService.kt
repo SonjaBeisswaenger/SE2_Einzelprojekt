@@ -51,4 +51,5 @@ class GameResultService {
         // 5. Den passenden Ausschnitt zurückgeben
         return sortedLeaderboard.subList(startIndex, endIndex)
     }
+
 }
