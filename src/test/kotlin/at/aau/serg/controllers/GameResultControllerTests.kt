@@ -10,6 +10,11 @@ import org.mockito.Mockito.`when` as whenever
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+/*
+ * Unit-Tests für den GameResultController.
+ * Verwendet Mockito, um den GameResultService zu simulieren (Mocking),
+ * damit nur die Controller-Logik isoliert getestet wird.
+ */
 class GameResultControllerTests {
 
     private lateinit var mockedService: GameResultService
@@ -17,6 +22,7 @@ class GameResultControllerTests {
 
     @BeforeEach
     fun setup() {
+        // Vor jedem Test wird ein frischer Mock und Controller erstellt.
         mockedService = mock<GameResultService>()
         controller = GameResultController(mockedService)
     }
@@ -27,13 +33,14 @@ class GameResultControllerTests {
 
         controller.addGameResult(result)
 
-        // Prüft, ob der Controller das Ergebnis wirklich an den Service weiterreicht
+        // Prüft, ob der Controller das Ergebnis wirklich an den Service weiterreicht.
         verify(mockedService).addGameResult(result)
     }
 
     @Test
     fun test_getGameResult_existingId_returnsResult() {
         val expected = GameResult(1, "Player", 10, 10.0)
+        // Definiert das Verhalten des Mocks (Stubbing).
         whenever(mockedService.getGameResult(1)).thenReturn(expected)
 
         val actual = controller.getGameResult(1)
@@ -54,7 +61,7 @@ class GameResultControllerTests {
     fun test_deleteGameResult_callsService() {
         controller.deleteGameResult(1)
 
-        // Prüft, ob der Löschbefehl beim Service ankommt
+        // Prüft, ob der Löschbefehl mit der richtigen ID beim Service ankommt.
         verify(mockedService).deleteGameResult(1)
     }
 
